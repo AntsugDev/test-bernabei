@@ -5,3 +5,9 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
+
+app_consumer:
+    path: /api/consumer
+    methods: [GET]
+    defaults:
+         _controller: App\Controller\ConsumerController::index  
