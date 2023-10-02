@@ -20,6 +20,17 @@ class ConsumerController extends AbstractController
     }
 
 
+    #[Route('/api/consumer/post', name: 'app_consumer_post')]
+    public function post(HttpClientInterface $client,Request $request): JsonResponse
+    {
+        $queryString = $request->getQueryString();
+        $obj = array();
+        parse_str($queryString,$obj);
+        $consumer = new ConsumerClient($client);
+        return $this->json($consumer->requestConsumer($obj['page'],$obj['size'],$obj['order'],$obj['sortBy']));
+    }
+
+
     #[Route('/api/auth/consumer', name: 'app_consumer_auth')]
     public function auth(HttpClientInterface $client, Request $request): JsonResponse
     {

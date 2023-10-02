@@ -8,6 +8,16 @@ kernel:
 
 app_consumer:
     path: /api/consumer
-    methods: [GET]
+    methods: [POST]
     defaults:
          _controller: App\Controller\ConsumerController::index  
+app_consumer_post:
+    path: /api/consumer/post
+    methods: [POST]
+    defaults:
+         _controller: App\Controller\ConsumerController::post          
+app_consumer_auth:    
+    path: /api/auth/consumer
+    methods: [GET]
+    defaults:
+         _controller: App\Controller\ConsumerController::auth  

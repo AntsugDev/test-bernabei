@@ -2,21 +2,16 @@
 
 namespace App\Entity;
 
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Auth {
 
-    /**
-     * @Assert\Type("string")
-     * @Assert\Email(messagge="Formato email ono valido",mode="html5",checkMx= true)
-     * @Assert\NotBlank(allowNull=true,messagge="Campo Obbligatorio")
-     */
+    #[Assert\Email(messagge:"Formato email non valido")]
+    #[Assert\NotBlank(messagge:"Campo obbligatorio")]
     private $username;
 
-    /**
-     * @Assert\Type("string")
-     * @Assert\NotBlank(allowNull=true,messagge="Campo Obbligatorio")
-     */
+    #[Assert\NotBlank(messagge:"Campo obbligatorio")]
     private $password;
 
 
