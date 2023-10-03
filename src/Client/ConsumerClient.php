@@ -4,7 +4,6 @@ namespace App\Client;
 
 use App\Entity\Auth;
 use App\Common\Pageable;
-use PhpParser\Node\Expr\Cast\Double;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
@@ -20,7 +19,7 @@ class ConsumerClient
         $this->client = $client;
     }
 
-    public function requestConsumer(int $page = 0, int $size = 5, string $order = 'desc', string $sortBy = 'title',array $body)
+    public function requestConsumer(int $page = 0, int $size = 5, string $order = 'desc', string $sortBy = 'title', array $body)
     {
         $response = $this->client->request('GET', self::API);
         $content = $response->toArray();
@@ -28,12 +27,14 @@ class ConsumerClient
         return $pageable->toArray($body);
     }
 
-    private function requestUser()
+    public function requestUser(string $id)
     {
         $response = $this->client->request('GET', self::API_USER);
         $content = $response->toArray();
-
-        return $this->LetUser($content);
+        $content = $this->LetUser($content);
+        if (strcmp($id, "") !== 0) {
+            return $this->ClientValidToken($id, $content);
+        } else return $content;
     }
 
     private function LetUser(array $content)
@@ -45,17 +46,11 @@ class ConsumerClient
         return $newArray;
     }
 
-
-    /*public function ricercaDati (string $title, double $price, string $description,string $categoria) {
-
-
-    }*/
-
-    public function Auth(Auth $auth)
+    private function ClientValidToken(string $encode, array $content): array
     {
-        return  array_filter($this->requestUser(),function($value) use($auth)  {
-            return strcmp($value['username'],$auth->getUsername()) === 0 && strcmp($value['pwd'],$auth->getPassword());
-        });
 
+        return array_filter($content, function ($value) use ($encode) {
+            return strcmp(base64_encode($value['username'] . ':' . $value['pwd']), $encode) === 0;
+        });
     }
 }

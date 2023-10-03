@@ -21,14 +21,15 @@ class EntryPoint implements AuthenticationEntryPointInterface
 
     public function start(Request $request, ?AuthenticationException $authException = null)
     {
-        try{
-        if (stristr($request->getRequestUri(), 'api') === false && stristr($request->getRequestUri(), 'auth') === false)
-            return new RedirectResponse('app_login');
-        else{
-            return $request;
-        }
-        }catch(AuthenticationException $exception){
-            return new RedirectResponse('/error-cust?exception='.$exception->getMessage(),503 );
+        try {
+            if (stristr($request->getRequestUri(), 'api') === false && stristr($request->getRequestUri(), 'auth') === false)
+                return new RedirectResponse('/login');
+            else {
+                //API
+                return new RedirectResponse($request->getPathInfo());
+            }
+        } catch (AuthenticationException $exception) {
+            return new RedirectResponse('/error-cust?exception=' . $exception->getMessage(), 503);
         }
     }
 }

@@ -26,4 +26,9 @@ app_login:
     path: /login
     methods: [GET,OPTIONS]
     defaults:
-         _controller: App\Controller\LoginController::index                  
+         _controller: App\Controller\LoginController::index   
+app_user:
+    path: /api/user/{id}
+    methods: [GET,OPTIONS]
+    defaults:
+         _controller: App\Controller\ConsumerController::user                           

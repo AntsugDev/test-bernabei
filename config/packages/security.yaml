@@ -23,10 +23,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        -  {path: ^/login,role: IS_AUTHENTICADET_ANOMYMOUSLY}
-        -  {path: ^/error-cust,role: IS_AUTHENTICADET_ANOMYMOUSLY}
-        -  {path: ^/api*,role: IS_AUTHENTICADET_ANOMYMOUSLY}
-        -  {path: ^/auth*,role: IS_AUTHENTICADET_ANOMYMOUSLY}
+       
        
 
 when@test:
