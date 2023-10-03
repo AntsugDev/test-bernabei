@@ -10,13 +10,9 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            lazy: true
-            provider: users_in_memory
-
-            form_login:
-                # "app_login" is the name of the route created previously
+           entry_point: App\Security\EntryPoint
+           form_login:
                 login_path: app_login
-                check_path: app_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -27,6 +23,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        -  {path: ^/login,role: IS_AUTHENTICADET_ANOMYMOUSLY}
+        -  {path: ^/error-cust,role: IS_AUTHENTICADET_ANOMYMOUSLY}
+        -  {path: ^/api*,role: IS_AUTHENTICADET_ANOMYMOUSLY}
+        -  {path: ^/auth*,role: IS_AUTHENTICADET_ANOMYMOUSLY}
        
 
 when@test:

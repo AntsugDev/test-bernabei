@@ -38,24 +38,45 @@ class Pageable
     }
 
 
-    public function toArray()
+    public function toArray(array $body)
     {
         try {
             $array = $this->init();
-            $column = array_column($this->content, $this->sortBy);
+            $filter = $this->content;
+            if (array_key_exists('title', $body) && !is_null($body['title'])) {
+                $tmp = $filter;
+                $params = $body['title'];
+                $filter = array_filter($tmp, function ($value) use ($params) {
+                    return stristr($value['title'], $params) !== false;
+                });
+            }
 
-            if (strcmp(strtoupper($this->order), 'DESC') === 0)
-                array_multisort($column, SORT_DESC, $this->content);
-            else
-                array_multisort($column, SORT_ASC, $this->content);
+            if (array_key_exists('description', $body) && !is_null($body['description'])) {
+                $tmp = $filter;
+                $params = $body['description'];
+                $filter = array_filter($tmp, function ($value) use ($params) {
+                    return stristr($value['description'], $params) !== false;
+                });
+            }
 
-            $chunk = array_chunk($this->content, $this->size);
-            $array['content'] = $chunk[intval($this->page)];
+
+            $column = array_column($filter, $this->sortBy);
+
+            if (count($filter) > 0) {
+                if (strcmp(strtoupper($this->order), 'DESC') === 0)
+                    array_multisort($column, SORT_DESC, $filter);
+                else
+                    array_multisort($column, SORT_ASC, $filter);
+            }
+            $chunk = count($filter) > 0 ?  array_chunk($filter, $this->size) : [];
+
+            $array['content'] = array_key_exists(intval($this->page), $chunk) ?  $chunk[intval($this->page)] : [];
             $array['totalPage'] = count($chunk);
-            $array['totalElements'] = count($this->content);
+            $array['totalElements'] = count($filter);
             $array['page'] = $this->page;
             $array['order'] = $this->order;
             $array['sortBy'] = $this->sortBy;
+
             return $array;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());

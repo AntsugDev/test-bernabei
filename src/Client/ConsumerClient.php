@@ -20,12 +20,12 @@ class ConsumerClient
         $this->client = $client;
     }
 
-    public function requestConsumer(int $page = 0, int $size = 5, string $order = 'desc', string $sortBy = 'title')
+    public function requestConsumer(int $page = 0, int $size = 5, string $order = 'desc', string $sortBy = 'title',array $body)
     {
         $response = $this->client->request('GET', self::API);
         $content = $response->toArray();
         $pageable = new Pageable($page, $size, $order, $sortBy, $content);
-        return $pageable->toArray();
+        return $pageable->toArray($body);
     }
 
     private function requestUser()
